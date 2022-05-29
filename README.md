@@ -21,7 +21,7 @@ From a command prompt in the `triangle` directory:
 
 The CMake template is based on [github.com/juliettef/GLFW-CMake-starter](https://github.com/juliettef/GLFW-CMake-starter). Check the [license](LICENSE.TXT) for details.
 
-More resources to GLFW:
+More resources on GLFW:
 
 GLFW homepage: [glfw.org](https://www.glfw.org/)  
 GLFW on GitHub: [github.com/glfw/glfw](https://github.com/glfw/glfw)
