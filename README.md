@@ -19,8 +19,7 @@ From a command prompt in the `triangle` directory:
 
 ## Credits
 
-The CMake template is is based on: [github.com/juliettef/GLFW-CMake-starter](https://github.com/juliettef/GLFW-CMake-starter)
-Check the [license](LICENSE.TXT) for details.
+The CMake template is based on [github.com/juliettef/GLFW-CMake-starter](https://github.com/juliettef/GLFW-CMake-starter). Check the [license](LICENSE.TXT) for details.
 
 More resources to GLFW:
 
