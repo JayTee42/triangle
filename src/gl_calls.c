@@ -117,7 +117,74 @@ static void init_shader_program(user_data_t* user_data)
     GLuint vertex_shader = compile_shader(GL_VERTEX_SHADER, "../shader/vertex.glsl", "Vertex shader");
     GLuint fragment_shader = compile_shader(GL_FRAGMENT_SHADER, "../shader/fragment.glsl", "Fragment shader");
 
-    // TODO ...
+    // Create an empty shader program object.
+    GLuint shader_program = glCreateProgram();
+    gl_check_error("glCreateProgram");
+
+    // Attach both shaders to the program.
+    glAttachShader(shader_program, vertex_shader);
+    gl_check_error("glAttachShader [vertex]");
+
+    glAttachShader(shader_program, fragment_shader);
+    gl_check_error("glAttachShader [fragment]");
+
+    // Link shader program.
+    glLinkProgram(shader_program);
+    gl_check_error("glLinkProgram");
+
+    // Detach both shaders.
+    glDetachShader(shader_program, vertex_shader);
+    gl_check_error("glDetachShader [vertex]");
+
+    glDetachShader(shader_program, fragment_shader);
+    gl_check_error("glDetachShader [fragment]");
+
+    // Delete them both.
+    glDeleteShader(vertex_shader);
+    gl_check_error("glDeleteShader [vertex]");
+
+    glDeleteShader(fragment_shader);
+    gl_check_error("glDeleteShader [fragment]");
+
+    // Check the link status of the shader program.
+    GLint success;
+
+    glGetShaderiv(shader_program, GL_LINK_STATUS, &success);
+    gl_check_error("glGetShaderiv");
+
+    if (success)
+    {
+        // Use the program from now on.
+        glUseProgram(shader_program);
+        gl_check_error("glUseProgram");
+
+        user_data->shader_program = shader_program;
+
+        return;
+    }
+
+    // Extract the length of the error message (incl. '\0').
+    GLint info_length;
+    glGetShaderiv(shader_program, GL_INFO_LOG_LENGTH, &info_length);
+
+    if (info_length > 1)
+    {
+        // Extract the error message.
+        char* info = malloc(info_length);
+        check_error(info != NULL, "Failed to alloc memory for shader program error\n");
+
+        glGetProgramInfoLog(shader_program, info_length, NULL, info);
+        gl_check_error("glGetShaderInfoLog");
+
+        fprintf(stderr, "Error linking shader: %s", info);
+        free(info);
+    }
+    else
+    {
+        fprintf(stderr, "No info log from the shader linker :(\n");
+    }
+
+    exit(EXIT_FAILURE);
 }
 
 void init_gl(GLFWwindow* window)
@@ -137,6 +204,8 @@ void draw_gl(GLFWwindow* window)
 void teardown_gl(GLFWwindow* window)
 {
     printf("Tearing down ...\n");
+    user_data_t* user_data = glfwGetWindowUserPointer(window);
 
-    // TODO
+    glDeleteProgram(user_data->shader_program);
+    gl_check_error("glDeleteProgram");
 }

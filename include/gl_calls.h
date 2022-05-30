@@ -13,6 +13,9 @@ typedef struct
 	// Dimensions of the window
 	int window_width;
 	int window_height;
+
+	// The shader program
+	GLuint shader_program;
 } user_data_t;
 
 // Generic error checks:
