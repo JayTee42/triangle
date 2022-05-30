@@ -7,6 +7,14 @@
 // Include the GLFW library (should be the same for all OS):
 #include <GLFW/glfw3.h>
 
+// Our struct for all kinds of user data
+typedef struct
+{
+	// Dimensions of the window
+	int window_width;
+	int window_height;
+} user_data_t;
+
 // Generic error checks:
 void check_error(int condition, const char* error_text);
 void gl_check_error(const char* error_text);

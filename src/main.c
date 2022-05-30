@@ -23,6 +23,13 @@ int main(void)
 {
     printf("Hello triangle!\n");
 
+    // Create the user data struct.
+    user_data_t user_data =
+    {
+        .window_width = 800,
+        .window_height = 600
+    };
+
     // Init GLFW
     printf("Initializing GLFW ...\n");
 
@@ -38,10 +45,39 @@ int main(void)
     // Create the window itself.
     printf("Creating window ...\n");
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Hello triangle", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(user_data.window_width, user_data.window_height, "Hello triangle", NULL, NULL);
     check_error(window != NULL, "Failed to create window");
 
-    // TODO
+    // Store (a pointer to) the user data inside the window.
+    glfwSetWindowUserPointer(window, &user_data);
+
+    // Make the OpenGL context of the window the current one.
+    glfwMakeContextCurrent(window);
+
+    // Let GLAD load all the OpenGL functions.
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+    // Try to swap every frame.
+    glfwSwapInterval(1);
+
+    // Init everything related to OpenGL.
+    init_gl(window);
+
+    // Main draw loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Draw a frame.
+        draw_gl(window);
+
+        // Swap the buffers to avoid tearing.
+        glfwSwapBuffers(window);
+
+        // React to the window manager's events (e.g. minimize, close, ...).
+        glfwPollEvents();
+    }
+
+    // Deinit the OpenGL stuff.
+    teardown_gl(window);
 
     // Destroy the window.
     glfwDestroyWindow(window);
