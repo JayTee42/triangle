@@ -80,7 +80,7 @@ static GLuint compile_shader(GLenum type, const char* shader_path, const char* s
     GLint success;
 
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    gl_check_error("glGetShaderiv");
+    gl_check_error("glGetShaderiv [comp status]");
 
     if (success)
     {
@@ -90,6 +90,7 @@ static GLuint compile_shader(GLenum type, const char* shader_path, const char* s
     // Extract the length of the error message (incl. '\0').
     GLint info_length;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_length);
+    gl_check_error("glGetShaderiv [comp info length]");
 
     if (info_length > 1)
     {
@@ -149,8 +150,8 @@ static void init_shader_program(user_data_t* user_data)
     // Check the link status of the shader program.
     GLint success;
 
-    glGetShaderiv(shader_program, GL_LINK_STATUS, &success);
-    gl_check_error("glGetShaderiv");
+    glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
+    gl_check_error("glGetProgramiv [link status]");
 
     if (success)
     {
@@ -165,7 +166,8 @@ static void init_shader_program(user_data_t* user_data)
 
     // Extract the length of the error message (incl. '\0').
     GLint info_length;
-    glGetShaderiv(shader_program, GL_INFO_LOG_LENGTH, &info_length);
+    glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &info_length);
+    gl_check_error("glGetProgramiv [link info length]");
 
     if (info_length > 1)
     {
@@ -249,11 +251,29 @@ void init_gl(GLFWwindow* window)
 
     // Init our vertex data.
     init_vertex_data(user_data);
+
+    // Obtain the internal size of the framebuffer.
+    int fb_width, fb_height;
+    glfwGetFramebufferSize(window, &fb_width, &fb_height);
+
+    // Align the viewport to it.
+    glViewport(0, 0, fb_width, fb_height);
+    gl_check_error("glViewport");
+
+    // Specify the clear color.
+    glClearColor(0.1, 0.1, 0.4, 1);
+    gl_check_error("glCLearColor");
 }
 
 void draw_gl(GLFWwindow* window)
 {
-    // TODO
+    // Clear the color buffer with a background color.
+    glClear(GL_COLOR_BUFFER_BIT);
+    gl_check_error("glClear");
+
+    // Finally, draw some stuff :)
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    gl_check_error("glDrawArrays");
 }
 
 void teardown_gl(GLFWwindow* window)
