@@ -16,7 +16,22 @@ typedef struct
 
 	// The shader program
 	GLuint shader_program;
+
+	// The VAO (blackbox, just ignore it ...)
+	GLuint vao;
+
+	// The VBO (GPU memory that holds the vertex data)
+	GLuint vbo;
 } user_data_t;
+
+#define ATTRIB_POSITION 0
+#define ATTRIB_COLOR 1
+
+typedef struct
+{
+	GLfloat position[2];
+	GLubyte color[3];
+} vertex_data_t;
 
 // Generic error checks:
 void check_error(int condition, const char* error_text);
